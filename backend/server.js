@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const routes = require('./routes/routes')
 const cors = require('cors')
+const path = require('path')
 
 const app = express()
 
@@ -22,6 +23,18 @@ const port = process.env.PORT
 
 // use routes : link router file 
 app.use(routes)
+
+// --------- deployment ----------
+__dirname = path.resolve();
+if(process.env.NODE_ENV === 'production'){
+
+    app.use(express.static(path.join(__dirname,'/frontend/build')))
+
+    app.get('*', (req,res) =>{
+        res.sendFile(path.resolve(__dirname,'frontend','build','index.html'))
+    })
+
+}
 
 // middleware : process happening between req and res is known as middleware
 app.use((req,res,next) => {
