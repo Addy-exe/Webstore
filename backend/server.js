@@ -19,22 +19,19 @@ app.use(
 
 // required variables
 const db = process.env.URL
-const port = process.env.PORT
+const port = process.env.PORT || 5000
 
 // use routes : link router file 
 app.use(routes)
 
 // --------- deployment ----------
 __dirname = path.resolve();
-if(process.env.NODE_ENV === 'production'){
+app.use(express.static(path.join(__dirname, "/frontend/build")));
 
-    app.use(express.static(path.join(__dirname,'/frontend/build')))
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
+});
 
-    app.get('*', (req,res) =>{
-        res.sendFile(path.resolve(__dirname,'frontend','build','index.html'))
-    })
-
-}
 
 // middleware : process happening between req and res is known as middleware
 app.use((req,res,next) => {

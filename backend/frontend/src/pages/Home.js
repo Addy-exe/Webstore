@@ -44,7 +44,7 @@ const Home = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch('http://localhost:4000')
+            const response = await fetch('https://web-store-mern.herokuapp.com/')
             const json = await response.json();
             if (response.ok) {
                 dispatch({ type: 'SET_PRODUCTS', payload: json })
