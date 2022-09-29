@@ -5,10 +5,13 @@ const routes = require('./routes/routes')
 const cors = require('cors')
 const path = require('path')
 
+
 const app = express()
+
 
 // middleware req.body handler
 app.use(express.json())
+
 
 // cross platform resource sharing
 app.use(
@@ -17,20 +20,14 @@ app.use(
     })
 )
 
+
 // required variables
 const db = process.env.URL
 const port = process.env.PORT || 5000
 
+
 // use routes : link router file 
 app.use(routes)
-
-// --------- deployment ----------
-__dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "/frontend/build")));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '/frontend/build', 'index.html'));
-});
 
 
 // middleware : process happening between req and res is known as middleware
@@ -38,6 +35,7 @@ app.use((req,res,next) => {
     console.log("Inside Middleware",req.path,req.method);
     next();
 })
+
 
 mongoose.connect(db)
 .then(() => {
