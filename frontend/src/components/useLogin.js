@@ -9,7 +9,7 @@ export const useLogin = () => {
     const login = async (email,password) => {
         setLoading(true)
         setError(null)
-        const response = await fetch('http://localhost:4000/login',{
+        const response = await fetch('https://webstore-mern.herokuapp.com/login',{
             method: 'POST',
             headers: {'Content-Type' : 'application/json'},
             body: JSON.stringify({email,password})
