@@ -14,11 +14,7 @@ app.use(express.json())
 
 
 // cross platform resource sharing
-app.use(
-    cors({
-        origin: "http://localhost:3000"
-    })
-)
+app.use(cors())
 
 
 // required variables
