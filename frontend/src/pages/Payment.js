@@ -3,9 +3,10 @@ import { makeStyles } from '@mui/styles'
 import { useFormik } from 'formik'
 import { paymentSchema } from '../Schema/Schema'
 import theme from '../Theme/Theme'
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import { CartState } from '../Context/Context'
 import { Link } from "react-router-dom"
+import { AuthState } from '../Context/AuthContext'
 
 const useStyles = makeStyles({
     container: {
@@ -75,9 +76,11 @@ const initialValues = {
 }
 
 const Payment = () => {
-    const { dispatch } = CartState()
+    const { cart , dispatch } = CartState()
+    const { user } = AuthState()
     const [check, setCheck] = useState(false)
     const [isProcessClick, setProcessClick] = useState(true)
+    const [total, setTotal] = useState(0)
 
     const { values, errors, isValid, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
@@ -88,13 +91,29 @@ const Payment = () => {
         }
     });
 
-    // console.log("credit", errors)
+    useEffect(() => {
+        setTotal(cart.reduce((acc, curr) => acc + Number(curr.price), 0))
+    }, [cart])
+
+    console.log("credit", cart)
 
     const classes = useStyles()
 
-    const handleProcess = () => {
+    const handleProcess = async () => {
         setCheck(true);
         setProcessClick(false);
+        // add cart items to database as order history
+        const response = await fetch('http://localhost:4000/payment',{
+            method: 'POST',
+            body: JSON.stringify({cart,total}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            },
+        })
+
+        console.log("response",response)
+
         dispatch({ type: 'REMOVE_ALL' })
     }
 

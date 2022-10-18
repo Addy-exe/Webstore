@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Carousel from 'react-material-ui-carousel'
 import theme from "../Theme/Theme";
 import {
-    Paper, Typography, Rating
+    Typography, Rating
 } from "@mui/material";
 
 const useStyles = makeStyles({

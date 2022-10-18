@@ -1,4 +1,4 @@
-import { ShoppingCart, GridView, LogoutSharp, LoginSharp } from '@mui/icons-material'
+import { ShoppingCart, GridView, LogoutSharp, LoginSharp, History } from '@mui/icons-material'
 import {
     List,
     ListItem,
@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 import Logout from './Logout'
 import { AuthState } from '../Context/AuthContext'
 
-const Lists = () => {
+const Lists = ({close}) => {
     const { logout } = Logout()
     const { user } = AuthState()
 
@@ -23,11 +23,12 @@ const Lists = () => {
         title: 'Cart',
         icon: <ShoppingCart />,
         path: '/cart'
-    }
+    },
     ]
 
     const handleClick = () => {
         logout()
+        close()
     }
 
     return (
@@ -37,7 +38,7 @@ const Lists = () => {
                 return (
                     <Link key={title} to={path} style={{ textDecoration: 'none', color: 'black' }}>
                         <ListItem>
-                            <ListItemButton>
+                            <ListItemButton onClick={close}>
                                 <ListItemIcon>
                                     {icon}
                                 </ListItemIcon>
@@ -59,12 +60,22 @@ const Lists = () => {
                     </Link>
                 )}
                 {user && (
-                    <ListItemButton onClick={handleClick}>
-                        <ListItemIcon>
-                            <LogoutSharp />
-                        </ListItemIcon>
-                        <ListItemText primary="Log out" />
-                    </ListItemButton>
+                    <div>
+                        <Link to="/order_history" style={{ textDecoration: 'none', color: 'black' }}>
+                            <ListItemButton onClick={close}>
+                                <ListItemIcon>
+                                    <History />
+                                </ListItemIcon>
+                                <ListItemText primary="Order History" />
+                            </ListItemButton>
+                        </Link>
+                        <ListItemButton onClick={handleClick}>
+                            <ListItemIcon>
+                                <LogoutSharp />
+                            </ListItemIcon>
+                            <ListItemText primary="Log out" />
+                        </ListItemButton>
+                    </div>
                 )
                 }
             </ListItem>

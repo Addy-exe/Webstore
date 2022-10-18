@@ -57,8 +57,6 @@ const Checkout = () => {
         }
     });
 
-    console.log(isValid)
-
     const handleClick = () => {
       navigate("/payment")
     }

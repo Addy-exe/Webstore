@@ -92,12 +92,12 @@ const Navbar = () => {
                     <Box>
                         {user && (
                             <Link to="/cart">
-                            <IconButton>
-                                <Badge badgeContent={cart.length} color='primary'>
-                                    <ShopingCartIcon color="icons" />
-                                </Badge>
-                            </IconButton>
-                        </Link>
+                                <IconButton>
+                                    <Badge badgeContent={cart.length} color='primary'>
+                                        <ShopingCartIcon color="icons" />
+                                    </Badge>
+                                </IconButton>
+                            </Link>
                         )}
                         <IconButton
                             size="large"
@@ -115,7 +115,12 @@ const Navbar = () => {
                             onClose={handleClose}
                             open={Boolean(anchorEl)}
                         >
-                            {user && (<MenuItem onClick={handleLogout}>Logout</MenuItem>)}
+                            {user && (<div>
+                                <Link to="/order_history" onClick={handleClose} style={{ textDecoration: 'none', color: 'black' }}>
+                                    <MenuItem>History</MenuItem>
+                                </Link>
+                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                            </div>)}
                             {!user && (
                                 <div>
                                     <Link to="/login" onClick={handleClose} style={{ textDecoration: 'none', color: 'black' }}>
@@ -141,7 +146,7 @@ const Navbar = () => {
                     </IconButton>
                 </Box>
                 {/* List Buttons Inside Drawer */}
-                <Lists />
+                <Lists close={handleDrawerClose}/>
             </Drawer>
         </>
     )

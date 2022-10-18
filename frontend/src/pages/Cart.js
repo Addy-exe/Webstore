@@ -94,7 +94,7 @@ const Cart = () => {
                 <Button
                     variant="contained"
                     className={classes.checkoutBtn}
-                    disabled={cart.length == 0 ? true : false}
+                    disabled={cart.length === 0 ? true : false}
                     onClick={() => navigate('/checkout')}
                 >CHECKOUT</Button>
                 <Link to="/" className={classes.backtoshop}>

@@ -5,6 +5,7 @@ import Products from '../components/Products'
 import { CartState } from '../Context/Context'
 import theme from '../Theme/Theme'
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import { AuthState } from '../Context/AuthContext'
 
 const useStyles = makeStyles({
     productsContainer: {
@@ -37,6 +38,7 @@ const useStyles = makeStyles({
 const Home = () => {
 
     const { products, dispatch } = CartState()
+    const { user } = AuthState()
 
     console.log("Products :", products)
 
@@ -44,14 +46,20 @@ const Home = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch('https://webstore-mern.herokuapp.com')
+            const response = await fetch('http://localhost:4000',{
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
             const json = await response.json();
             if (response.ok) {
                 dispatch({ type: 'SET_PRODUCTS', payload: json })
             }
         }
-        fetchProducts()
-    }, [dispatch])
+        if(user){
+            fetchProducts()
+        }
+    }, [dispatch,user])
 
 
     return (
