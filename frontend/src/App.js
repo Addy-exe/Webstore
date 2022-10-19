@@ -12,7 +12,7 @@ import { AuthState } from './Context/AuthContext'
 import Payment from './pages/Payment';
 import { CartState } from './Context/Context';
 import Orders from './pages/Orders';
-// import PreviewOrder from './pages/PreviewOrder';
+import PreviewOrder from './pages/PreviewOrder';
 
 function App() {
 
@@ -51,6 +51,10 @@ function App() {
           <Route
             path='/payment'
             element={user ? <Payment/>: <Navigate to="/"/>}
+          />
+           <Route
+            path='/preview'
+            element={user ? <PreviewOrder/>: <Navigate to="/"/>}
           />
            <Route
             path='/order_history'

@@ -3,10 +3,7 @@ import { makeStyles } from '@mui/styles'
 import { useFormik } from 'formik'
 import { paymentSchema } from '../Schema/Schema'
 import theme from '../Theme/Theme'
-import { useState , useEffect } from 'react'
-import { CartState } from '../Context/Context'
-import { Link } from "react-router-dom"
-import { AuthState } from '../Context/AuthContext'
+import { useNavigate } from "react-router-dom"
 
 const useStyles = makeStyles({
     container: {
@@ -76,11 +73,8 @@ const initialValues = {
 }
 
 const Payment = () => {
-    const { cart , dispatch } = CartState()
-    const { user } = AuthState()
-    const [check, setCheck] = useState(false)
-    const [isProcessClick, setProcessClick] = useState(true)
-    const [total, setTotal] = useState(0)
+
+    const navigate = useNavigate()
 
     const { values, errors, isValid, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
@@ -91,104 +85,79 @@ const Payment = () => {
         }
     });
 
-    useEffect(() => {
-        setTotal(cart.reduce((acc, curr) => acc + Number(curr.price), 0))
-    }, [cart])
-
-    console.log("credit", cart)
-
     const classes = useStyles()
 
-    const handleProcess = async () => {
-        setCheck(true);
-        setProcessClick(false);
-        // add cart items to database as order history
-        const response = await fetch('http://localhost:4000/payment',{
-            method: 'POST',
-            body: JSON.stringify({cart,total}),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.token}`
-            },
-        })
-
-        console.log("response",response)
-
-        dispatch({ type: 'REMOVE_ALL' })
+    const handleClick = () => {
+        navigate("/preview")
     }
 
     return (
         <div className={classes.container}>
-            {isProcessClick && (
-                <>
-                    <Typography variant='h5'>Payment Details</Typography>
-                    <form onSubmit={handleSubmit}>
-                        <div className={classes.formHolder}>
-                            <div className={classes.input_block}>
-                                <label htmlFor='number'>Card Number</label>
-                                <input
-                                    name='number'
-                                    type='text'
-                                    placeholder='1234 1234 1234 1234'
-                                    value={values.number}
-                                    className={classes.input_field}
-                                    onChange={handleChange}
-                                />
-                                {errors.number && true ? <p className={classes.input_error}>{errors.number}</p> : null}
-                            </div>
-                            <div className={classes.input_block}>
-                                <label htmlFor='name'>Name on Card</label>
-                                <input
-                                    name='name'
-                                    type='text'
-                                    placeholder='Enter name'
-                                    value={values.name}
-                                    className={classes.input_field}
-                                    onChange={handleChange}
-                                />
-                                {errors.name && true ? <p className={classes.input_error}>{errors.name}</p> : null}
-                            </div>
-                            <div className={classes.security}>
-                                <div className={classes.input_block}>
-                                    <label htmlFor='Expiry_date'>Expiry Date</label>
-                                    <input
-                                        name='Expiry_date'
-                                        type='text'
-                                        value={values.Expiry_date}
-                                        placeholder="06/30"
-                                        className={classes.input_field}
-                                        onChange={handleChange}
-                                    />
-                                    {errors.Expiry_date && true ? <p className={classes.input_error}>{errors.Expiry_date}</p> : null}
-                                </div>
-                                <div className={classes.input_block}>
-                                    <label htmlFor='cvv'>Security Code</label>
-                                    <input
-                                        name='cvv'
-                                        type='text'
-                                        value={values.cvv}
-                                        placeholder="123"
-                                        className={classes.input_field}
-                                        onChange={handleChange}
-                                    />
-                                    {errors.cvv && true ? <p className={classes.input_error}>{errors.cvv}</p> : null}
-                                </div>
-                            </div>
-                            <button
-                                type='button'
-                                className={classes.buttonStyle}
-                                disabled={!isValid || !values.cvv}
-                                onClick={handleProcess}
-                            >
-                                Process
-                            </button>
+            <Typography variant='h5'>Payment Details</Typography>
+            <form onSubmit={handleSubmit}>
+                <div className={classes.formHolder}>
+                    <div className={classes.input_block}>
+                        <label htmlFor='number'>Card Number</label>
+                        <input
+                            name='number'
+                            type='text'
+                            placeholder='1234 1234 1234 1234'
+                            value={values.number}
+                            className={classes.input_field}
+                            onChange={handleChange}
+                        />
+                        {errors.number && true ? <p className={classes.input_error}>{errors.number}</p> : null}
+                    </div>
+                    <div className={classes.input_block}>
+                        <label htmlFor='name'>Name on Card</label>
+                        <input
+                            name='name'
+                            type='text'
+                            placeholder='Enter name'
+                            value={values.name}
+                            className={classes.input_field}
+                            onChange={handleChange}
+                        />
+                        {errors.name && true ? <p className={classes.input_error}>{errors.name}</p> : null}
+                    </div>
+                    <div className={classes.security}>
+                        <div className={classes.input_block}>
+                            <label htmlFor='Expiry_date'>Expiry Date</label>
+                            <input
+                                name='Expiry_date'
+                                type='text'
+                                value={values.Expiry_date}
+                                placeholder="06/30"
+                                className={classes.input_field}
+                                onChange={handleChange}
+                            />
+                            {errors.Expiry_date && true ? <p className={classes.input_error}>{errors.Expiry_date}</p> : null}
                         </div>
-                    </form>
-                </>
-            )
-            }
-            {check && (
-                <div className={classes.thankyou}>
+                        <div className={classes.input_block}>
+                            <label htmlFor='cvv'>Security Code</label>
+                            <input
+                                name='cvv'
+                                type='text'
+                                value={values.cvv}
+                                placeholder="123"
+                                className={classes.input_field}
+                                onChange={handleChange}
+                            />
+                            {errors.cvv && true ? <p className={classes.input_error}>{errors.cvv}</p> : null}
+                        </div>
+                    </div>
+                    <button
+                        type='button'
+                        className={classes.buttonStyle}
+                        disabled={!isValid || !values.cvv}
+                        onClick={handleClick}
+                    >
+                        Process
+                    </button>
+                </div>
+            </form>
+
+            {/* <div className={classes.thankyou}>
                     <div>
                         <Typography variant='h2'>Thank you..!</Typography>
                         <span>Please check your mail for order confirmation</span>
@@ -201,8 +170,7 @@ const Payment = () => {
                             >Continue shoping</Button>
                         </Link>
                     </div>
-                </div>
-            )}
+                </div> */}
         </div>
 
     )
