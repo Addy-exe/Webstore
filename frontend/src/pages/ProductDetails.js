@@ -73,11 +73,17 @@ const useStyles = makeStyles({
 
 const ProductDetails = () => {
 
-    const { products, dispatch } = CartState()
+    const { products, cart , dispatch } = CartState()
     const { id } = useParams()
     const classes = useStyles()
 
     const item = products.find((p) => p._id === id);
+
+    const handleClick = () => {
+        if(!(cart.some(p=>p._id === item._id))){
+            dispatch({type: 'ADD_TO_CART',payload: item})
+        }
+    }
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -112,7 +118,7 @@ const ProductDetails = () => {
                 
                 <button
                     className={classes.buttonStyle}
-                    onClick={() => { dispatch({ type: 'ADD_TO_CART', payload: item }) }}
+                    onClick={handleClick}
                 >
                     ADD TO CART
                 </button>
