@@ -1,5 +1,5 @@
-import { useState , useEffect } from 'react'
-import { Typography , Paper } from '@mui/material'
+import { useState, useEffect } from 'react'
+import { Typography, Paper } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { CartState } from '../Context/Context'
 import { AuthState } from '../Context/AuthContext'
@@ -11,7 +11,8 @@ const useStyles = makeStyles({
         top: 80,
         width: '70%',
         margin: 'auto',
-        display: 'flex'
+        display: 'flex',
+        justifyContent: 'space-evenly'
     },
     cart_items: {
         width: '60%'
@@ -21,6 +22,26 @@ const useStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-evenly'
+    },
+    summary: {
+        position: 'relative',
+        width: '32%',
+        height: 120,
+        marginTop: 32,  
+    },
+    place_order: {
+        position: 'absolute',
+        backgroundColor: '#2ecc71',
+        border: 'none',
+        borderRadius: 14,
+        width: '80%',
+        left: '10%',
+        bottom: '10%',
+        height: 26,
+        cursor: 'pointer',
+        color: 'white',
+        letterSpacing: 1,
+        fontSize: 14
     }
 })
 
@@ -42,18 +63,22 @@ const PreviewOrder = () => {
         setCheck(true);
         setProcessClick(false);
         // add cart items to database as order history
-        const response = await fetch('http://localhost:4000/payment',{
+        const response = await fetch('http://localhost:4000/payment', {
             method: 'POST',
-            body: JSON.stringify({cart,total}),
+            body: JSON.stringify({ cart, total }),
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${user.token}`
             },
         })
 
-        console.log("response",response)
+        console.log("response", response)
 
         dispatch({ type: 'REMOVE_ALL' })
+    }
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     return (
@@ -61,18 +86,25 @@ const PreviewOrder = () => {
             <div className={classes.cart_items}>
                 <Typography>Order Summary :</Typography>
                 {cart.map((item) => {
-                    return (    
+                    return (
                         <Paper key={item._id} className={classes.singleItem}>
-                            <img src={item.img[0]} style={{ width: 140,height: 140 }}/>
-                            <Typography style={{ width: 140}}>{item.name}</Typography>
-                            <Typography style={{ width: 100, height: 50}}>{item.price}</Typography>
+                            <img src={item.img[0]} style={{ width: 140, height: 140 }} />
+                            <Typography style={{ width: 140 }}>{item.name}</Typography>
+                            <Typography style={{ width: 100, height: 50 }}>₹{numberWithCommas(item.price)}</Typography>
                         </Paper>
                     )
                 })}
             </div>
-            <div>
-
-            </div>
+            <Paper className={classes.summary}>
+                <Typography style={{ position: 'relative', fontSize: '1.25rem' }}>Total Amount: <span>₹{numberWithCommas(total)}</span></Typography>
+                <Typography style={{ position: 'relative', fontSize: '1rem', color: '#787878' }}>Total Items :
+                    <span>{cart.length}</span>
+                </Typography>
+                <button 
+                    className={classes.place_order}
+                    onClick={handleProcess}
+                >Place Order</button>
+            </Paper>
         </div>
     )
 }
