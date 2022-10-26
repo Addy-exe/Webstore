@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Typography, Paper } from '@mui/material'
+import { Typography, Paper, Button } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { CartState } from '../Context/Context'
 import { AuthState } from '../Context/AuthContext'
+import { Link } from 'react-router-dom'
+import theme from '../Theme/Theme'
 
 
 const useStyles = makeStyles({
@@ -12,22 +14,28 @@ const useStyles = makeStyles({
         width: '70%',
         margin: 'auto',
         display: 'flex',
-        justifyContent: 'space-evenly'
-    },
-    cart_items: {
-        width: '60%'
+        justifyContent: 'space-evenly',
+        [theme.breakpoints.down("tablet")]: {
+           flexDirection: 'column',
+        }
     },
     singleItem: {
         marginTop: 20,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        [theme.breakpoints.down("tablet")]: {
+            flexDirection: 'column',
+            gap: 30
+         }
     },
     summary: {
         position: 'relative',
-        width: '32%',
         height: 120,
-        marginTop: 32,  
+        marginTop: 32,
+        [theme.breakpoints.down("mobile")]: {
+            height: 160
+        }
     },
     place_order: {
         position: 'absolute',
@@ -42,15 +50,24 @@ const useStyles = makeStyles({
         color: 'white',
         letterSpacing: 1,
         fontSize: 14
-    }
+    },
+    thankyou: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '40%',
+        height: 260,
+        margin: 'auto',
+        marginTop: 100,
+    },
 })
 
 const PreviewOrder = () => {
 
     const { cart, dispatch } = CartState()
     const [total, setTotal] = useState(0)
-    const [check, setCheck] = useState(false)
-    const [isProcessClick, setProcessClick] = useState(true)
+    const [check, setCheck] = useState(true)
     const { user } = AuthState()
 
     const classes = useStyles()
@@ -60,8 +77,7 @@ const PreviewOrder = () => {
     }, [cart])
 
     const handleProcess = async () => {
-        setCheck(true);
-        setProcessClick(false);
+        setCheck(false);
         // add cart items to database as order history
         const response = await fetch('http://localhost:4000/payment', {
             method: 'POST',
@@ -82,30 +98,49 @@ const PreviewOrder = () => {
     }
 
     return (
-        <div className={classes.container}>
-            <div className={classes.cart_items}>
-                <Typography>Order Summary :</Typography>
-                {cart.map((item) => {
-                    return (
-                        <Paper key={item._id} className={classes.singleItem}>
-                            <img src={item.img[0]} style={{ width: 140, height: 140 }} />
-                            <Typography style={{ width: 140 }}>{item.name}</Typography>
-                            <Typography style={{ width: 100, height: 50 }}>₹{numberWithCommas(item.price)}</Typography>
-                        </Paper>
-                    )
-                })}
-            </div>
-            <Paper className={classes.summary}>
-                <Typography style={{ position: 'relative', fontSize: '1.25rem' }}>Total Amount: <span>₹{numberWithCommas(total)}</span></Typography>
-                <Typography style={{ position: 'relative', fontSize: '1rem', color: '#787878' }}>Total Items :
-                    <span>{cart.length}</span>
-                </Typography>
-                <button 
-                    className={classes.place_order}
-                    onClick={handleProcess}
-                >Place Order</button>
-            </Paper>
-        </div>
+        <>
+            {check ? (
+                <div className={classes.container}>
+                    <div>
+                        <Typography>Order Summary :</Typography>
+                        {cart.map((item) => {
+                            return (
+                                <Paper key={item._id} className={classes.singleItem}>
+                                    <img src={item.img[0]} style={{ width: 140, height: 140 }} />
+                                    <Typography style={{ width: 140 }}>{item.name}</Typography>
+                                    <Typography style={{ width: 100, height: 50 }}>₹{numberWithCommas(item.price)}</Typography>
+                                </Paper>
+                            )
+                        })}
+                    </div>
+                    <Paper className={classes.summary}>
+                        <Typography style={{ position: 'relative', fontSize: '1.25rem' }}>Total Amount: <span>₹{numberWithCommas(total)}</span></Typography>
+                        <Typography style={{ position: 'relative', fontSize: '1rem', color: '#787878' }}>Total Items :
+                            <span>{cart.length}</span>
+                        </Typography>
+                        <button
+                            className={classes.place_order}
+                            onClick={handleProcess}
+                        >Place Order</button>
+                    </Paper>
+                </div>
+            ) : (
+                <div className={classes.thankyou}>
+                    <div className={classes.head}>
+                    <Typography variant='h3'>Thank you..!</Typography>
+                    <span>Please check your mail for order confirmation</span>
+                    </div>
+                    <div style={{ width: '100%', backgroundColor: 'black', height: 1 }} />
+                    <div>
+                        <Link to="/" style={{ textDecoration: 'none' }}>
+                            <Button
+                                variant='contained'
+                            >Continue shoping</Button>
+                        </Link>
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

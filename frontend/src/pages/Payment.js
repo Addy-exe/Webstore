@@ -53,16 +53,6 @@ const useStyles = makeStyles({
             flexDirection: 'column'
         }
     },
-    thankyou: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        width: '80%',
-        height: 400,
-        margin: 'auto',
-        marginTop: 20,
-    }
 })
 
 const initialValues = {
@@ -156,21 +146,6 @@ const Payment = () => {
                     </button>
                 </div>
             </form>
-
-            {/* <div className={classes.thankyou}>
-                    <div>
-                        <Typography variant='h2'>Thank you..!</Typography>
-                        <span>Please check your mail for order confirmation</span>
-                    </div>
-                    <div style={{ width: '100%', backgroundColor: 'black', height: 1 }} />
-                    <div>
-                        <Link to="/" style={{ textDecoration: 'none'}}>
-                            <Button
-                                variant='contained'
-                            >Continue shoping</Button>
-                        </Link>
-                    </div>
-                </div> */}
         </div>
 
     )
