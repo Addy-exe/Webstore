@@ -92,7 +92,7 @@ const ProductDetails = () => {
     return (
         <div className={classes.productContainer}>
             <Carousel className={classes.slider}>
-                {item.img.map((i) => <img alt={item.name} src={i} className={classes.imgStyle} />)}
+                {item.img.map((i) => <img key={item._id} alt={item.name} src={i} className={classes.imgStyle} />)}
             </Carousel>
             <div className={classes.details}>
                 <Typography

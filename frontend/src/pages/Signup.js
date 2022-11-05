@@ -39,7 +39,8 @@ const useStyles = makeStyles({
         height: 30,
         backgroundColor: theme.palette.secondary.main,
         color: 'white',
-        border: 'none'
+        border: 'none',
+        cursor: 'pointer'
     },
     error: {
         width: '80%',

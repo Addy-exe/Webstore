@@ -106,7 +106,7 @@ const PreviewOrder = () => {
                         {cart.map((item) => {
                             return (
                                 <Paper key={item._id} className={classes.singleItem}>
-                                    <img src={item.img[0]} style={{ width: 140, height: 140 }} />
+                                    <img src={item.img[0]} style={{ width: 140, height: 140 }} alt={item._id}/>
                                     <Typography style={{ width: 140 }}>{item.name}</Typography>
                                     <Typography style={{ width: 100, height: 50 }}>₹{numberWithCommas(item.price)}</Typography>
                                 </Paper>
