@@ -46,7 +46,7 @@ const Home = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch('http://localhost:4000',{
+            const response = await fetch('https://webstore-mern.herokuapp.com',{
                 headers: {
                     'Authorization': `Bearer ${user.token}`
                 }

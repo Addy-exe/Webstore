@@ -79,7 +79,7 @@ const PreviewOrder = () => {
     const handleProcess = async () => {
         setCheck(false);
         // add cart items to database as order history
-        const response = await fetch('http://localhost:4000/payment', {
+        const response = await fetch('https://webstore-mern.herokuapp.com/payment', {
             method: 'POST',
             body: JSON.stringify({ cart, total }),
             headers: {

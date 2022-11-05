@@ -38,7 +38,7 @@ const Orders = () => {
     useEffect(() => {
         setLoading(false)
         const fetchProducts = async () => {
-            const response = await fetch('http://localhost:4000/order_history', {
+            const response = await fetch('https://webstore-mern.herokuapp.com/order_history', {
                 headers: {
                     'Authorization': `Bearer ${user.token}`
                 }
